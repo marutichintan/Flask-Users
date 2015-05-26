@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request,flash, redirect, url_for
-from app.users.models import Users, UsersSchema
+from app.users.models import Users, UsersSchema, Roles
+from werkzeug.security import generate_password_hash, check_password_hash
 
 users = Blueprint('users', __name__)
 #http://marshmallow.readthedocs.org/en/latest/quickstart.html#declaring-schemas
@@ -17,13 +18,18 @@ def user_add():
     if request.method == 'POST':
         #Validate form values by de-serializing the request, http://marshmallow.readthedocs.org/en/latest/quickstart.html#validation
         form_errors = schema.validate(request.form.to_dict())
-        if not form_errors:        
+        if not form_errors:
             name=request.form['name']
             email=request.form['email']
-            user=Users(email, name)
+            password=generate_password_hash(request.form['password'])
+            is_enabled=request.form['is_enabled']
+            user=Users(email, name,password, is_enabled)
+            if request.form['role'] == "admin":
+                role = Roles.query.filter_by(name="admin").first()
+                user.roles.append(role)
             return add(user, success_url = 'users.user_index', fail_url = 'users.user_add')
         else:
-           flash(form_errors)        
+           flash(form_errors)
 
     return render_template('/users/add.html')
 
@@ -48,8 +54,8 @@ def user_update (id):
 def user_delete (id):
      user = Users.query.get_or_404(id)
      return delete(user, fail_url = 'users.user_index')
-     
-     
+
+
 #CRUD FUNCTIONS
 #Arguments  are data to add, function to redirect to if the add was successful and if not
 def add (data, success_url = '', fail_url = ''):

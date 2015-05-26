@@ -54,9 +54,10 @@ class UsersSchema(Schema):
     email = fields.Email()
     password = fields.String(validate=not_blank)
     is_active = fields.Boolean(validate=not_blank)
+    role = fields.String()
 
     class Meta:
-       fields = ('id', 'email', 'name', 'password', 'is_enabled')
+       fields = ('id', 'email', 'name', 'password', 'is_enabled', 'roles')
 
 class Roles(db.Model):
     id = db.Column(db.Integer(), primary_key=True)

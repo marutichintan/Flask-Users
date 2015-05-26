@@ -1,5 +1,5 @@
 
-{% macro user_form(form_name = '', user_name='', user_email='', user_password = '') %}
+{% macro user_form(form_name = '', user_name='', user_email='', required='required') %}
 
         <div class="center row">
             <div class="large-8 columns">
@@ -9,8 +9,66 @@
 
 				  <label>Name <small>required</small><input type="text" name="name" value="{{ user_name }}"  required/>	 </label>
 				 <label> Email <small>required</small> <input type="email" name="email" value="{{ user_email }}" required/> </label>
-         <label>password <small>required</small><input type="password" name="password" value="{{ user_password }}"  required/>	 </label>
-         
+         <label>password <small>required</small><input type="password" name="password" value=""  {{ required }}/>	 </label>
+      <div class="row">
+         <!-- START STATUS -->
+         {% if form_name == Update %}
+
+                    <div class="small-4 columns">
+                    <label>Status
+                       <select name="is_enabled" multiple>
+                                    {% if users.is_enabled %}
+                                        <option value="True" selected>Active</option>
+                                        <option value="False" >Suspended</option>
+                                     {% else %}
+                                     <option value="True" >Active</option>
+                                     <option value="False" selected>Suspended</option>
+
+                                    {% endif %}
+                         </select> </label>
+                        </div>
+
+            <!-- For a New User-->
+            {% else %}
+
+                  <div class="small-4 columns">
+                  <label>Status
+                     <select name="is_enabled" multiple>
+
+
+                <option value="True" selected>Active</option>
+                <option value="False" >Suspended</option>
+              </select> </label>
+             </div>
+
+            {% endif %}
+
+            <!-- End STATUS -- >
+         <!--  START ROLE -->
+    {% if form_name == Update %}
+      <div class="small-4 columns">
+        <label>Role</label>
+
+             {% if users.roles == "admin" %}
+                    <input type="radio" name="role" value="admin" checked><label>Admin</label>
+             {% else %}
+                   <input type="radio" name="role" value="admin" ><label>Admin</label>
+
+             {% endif %}
+          </div>
+          <!-- For a New User-->
+    {% else %}
+    <div class="small-4 columns">
+      <label>Role</label>
+        <input type="radio" name="role" value="admin" ><label>Admin</label>
+      </div>
+
+    {% endif %}
+
+    <!--  END ROLE -->
+
+  </div>
+
 				   <button class="button "  type="submit">{{ form_name }}</button>
                   </form>
                 </fieldset>
