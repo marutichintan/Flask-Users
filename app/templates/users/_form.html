@@ -48,13 +48,15 @@
     {% if form_name == Update %}
       <div class="small-4 columns">
         <label>Role</label>
-
-             {% if users.roles == "admin" %}
+          {% for role in current_role %}
+              {{ role.name }}
+             {% if role.name == "admin" %}
                     <input type="radio" name="role" value="admin" checked><label>Admin</label>
              {% else %}
                    <input type="radio" name="role" value="admin" ><label>Admin</label>
 
              {% endif %}
+         {% endfor %}
           </div>
           <!-- For a New User-->
     {% else %}

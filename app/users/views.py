@@ -16,7 +16,7 @@ def user_index():
 @users.route('/add' , methods=['POST', 'GET'])
 def user_add():
     if request.method == 'POST':
-        #Validate form values by de-serializing the request, http://marshmallow.readthedocs.org/en/latest/quickstart.html#validation
+        #http://marshmallow.readthedocs.org/en/latest/quickstart.html#validation
         form_errors = schema.validate(request.form.to_dict())
         if not form_errors:
             name=request.form['name']
@@ -24,7 +24,8 @@ def user_add():
             password=generate_password_hash(request.form['password'])
             is_enabled=request.form['is_enabled']
             user=Users(email, name,password, is_enabled)
-            if request.form['role'] == "admin":
+            role = request.form.get('role', '')
+            if role == "admin":
                 role = Roles.query.filter_by(name="admin").first()
                 user.roles.append(role)
             return add(user, success_url = 'users.user_index', fail_url = 'users.user_add')
@@ -38,16 +39,29 @@ def user_add():
 def user_update (id):
     #Get user by primary key:
     user=Users.query.get_or_404(id)
+    current_role = user.roles
     if request.method == 'POST':
         form_errors = schema.validate(request.form.to_dict())
         if not form_errors:
            user.name = request.form['name']
            user.email = request.form['email']
-           return update(user , id, success_url = 'users.user_index', fail_url = 'users.user_update')
+           user.is_enabled=request.form['is_enabled']
+           new_role = request.form.get('role', None)
+           print (new_role , current_role)
+           if new_role is not None and new_role not in current_role:
+               role = Roles.query.filter_by(name="admin").first()
+               user.roles.append(role)
+           if not request.form['password']:
+               return update(user , id, success_url = 'users.user_index', fail_url = 'users.user_update')
+           else:
+               user.password=generate_password_hash(request.form['password'])
+
+
+               return update(user , id, success_url = 'users.user_index', fail_url = 'users.user_update')
         else:
            flash(form_errors)
 
-    return render_template('/users/update.html', user=user)
+    return render_template('/users/update.html', user=user, current_role = current_role)
 
 
 @users.route('/delete/<int:id>' , methods=['POST', 'GET'])

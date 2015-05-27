@@ -52,7 +52,8 @@ class UsersSchema(Schema):
     not_blank = validate.Length(min=1, error='Field cannot be blank')
     name = fields.String(validate=not_blank)
     email = fields.Email()
-    password = fields.String(validate=not_blank)
+    #Need to make this field not blank on add
+    password = fields.String()
     is_active = fields.Boolean(validate=not_blank)
     role = fields.String()
 
