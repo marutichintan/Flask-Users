@@ -12,14 +12,19 @@
             <table> <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Role</th></tr></thead>
              <tbody>
              {% for result in results %}
-              <tr><td>{{ result['name'] }}</td>
-              <td>{{ result['email'] }}</td>
-              <td>{{ result['is_enabled'] }}</td>
-              <td></td>
-
+                <tr><td>{{ result['name'] }}</td>
+                <td>{{ result['email'] }}</td>
+                <td>{{ result['is_enabled'] }}</td>
+                {% if not result ['roles'] %}
+                    <td>None</td>
+                    {% else %}
+                      {% for role in result ['roles'] %}
+                      <td>{{ role.name }}</td>
+                      {%  endfor %}
+                {% endif %}
                  <td><a href="{{ url_for('users.user_update', id=result['id']) }}">Edit</a>        <a href="{{ url_for('users.user_delete', id=result['id']) }}">Delete</a></td>
                 </tr>
-                {% endfor %}
+             {% endfor %}
               </tbody>
             </table>
           </div>

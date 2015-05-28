@@ -9,8 +9,8 @@ schema = UsersSchema()
 #Users
 @users.route('/' )
 def user_index():
-    users = Users.query.all()
-    results = schema.dump(users, many=True).data
+    results = Users.query.all()
+    #results = schema.dump(users, many=True).data
     return render_template('/users/index.html', results=results)
 
 @users.route('/add' , methods=['POST', 'GET'])
@@ -20,11 +20,12 @@ def user_add():
         form_errors = schema.validate(request.form.to_dict())
         if not form_errors:
             name=request.form['name']
-            email=request.form['email']
+            email=request.form['email'].lower()
             password=generate_password_hash(request.form['password'])
             is_enabled=request.form['is_enabled']
             user=Users(email, name,password, is_enabled)
             role = request.form.get('role', '')
+
             if role == "admin":
                 role = Roles.query.filter_by(name="admin").first()
                 user.roles.append(role)
@@ -39,25 +40,34 @@ def user_add():
 def user_update (id):
     #Get user by primary key:
     user=Users.query.get_or_404(id)
-    current_role = user.roles
+    current_role = [role.name for role in user.roles]
+
     if request.method == 'POST':
         form_errors = schema.validate(request.form.to_dict())
         if not form_errors:
            user.name = request.form['name']
-           user.email = request.form['email']
+           user.email = request.form['email'].lower()
            user.is_enabled=request.form['is_enabled']
-           new_role = request.form.get('role', None)
-           print (new_role , current_role)
-           if new_role is not None and new_role not in current_role:
-               role = Roles.query.filter_by(name="admin").first()
-               user.roles.append(role)
+           new_role = request.form.getlist('role')
+           print(new_role)
+
+           #Add new roles
+           for role in new_role:
+                if role not in current_role:
+                  role = Roles.query.filter_by(name=role).first()
+                  user.roles.append(role)
+            #Remove old roles.
+           for role in current_role:
+                if role not in new_role:
+                      role = Roles.query.filter_by(name=role).first()
+                      user.roles.remove(role)
            if not request.form['password']:
                return update(user , id, success_url = 'users.user_index', fail_url = 'users.user_update')
            else:
                user.password=generate_password_hash(request.form['password'])
 
 
-               return update(user , id, success_url = 'users.user_index', fail_url = 'users.user_update')
+           return update(user , id, success_url = 'users.user_index', fail_url = 'users.user_update')
         else:
            flash(form_errors)
 

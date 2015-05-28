@@ -4,8 +4,6 @@
 
 		{% from 'users/_form.html' import user_form %}
 
-    {{ user_form(form_name = 'Update', user_name = user.name, user_email = user.email, required = "") }}
+    {{ user_form(form_name = 'Update', user=user, current_role = current_role, user_name = user.name, user_email = user.email, required = "") }}
 
 {% endblock %}
-
-   

@@ -1,5 +1,5 @@
 
-{% macro user_form(form_name = '', user_name='', user_email='', required='required') %}
+{% macro user_form(form_name = '', user='', current_role ='', user_name='', user_email='', required='required') %}
 
         <div class="center row">
             <div class="large-8 columns">
@@ -12,12 +12,12 @@
          <label>password <small>required</small><input type="password" name="password" value=""  {{ required }}/>	 </label>
       <div class="row">
          <!-- START STATUS -->
-         {% if form_name == Update %}
+         {% if form_name == 'Update' %}
 
                     <div class="small-4 columns">
                     <label>Status
                        <select name="is_enabled" multiple>
-                                    {% if users.is_enabled %}
+                                    {% if user.is_enabled %}
                                         <option value="True" selected>Active</option>
                                         <option value="False" >Suspended</option>
                                      {% else %}
@@ -45,25 +45,41 @@
 
             <!-- End STATUS -- >
          <!--  START ROLE -->
-    {% if form_name == Update %}
-      <div class="small-4 columns">
-        <label>Role</label>
-          {% for role in current_role %}
-              {{ role.name }}
-             {% if role.name == "admin" %}
-                    <input type="radio" name="role" value="admin" checked><label>Admin</label>
-             {% else %}
-                   <input type="radio" name="role" value="admin" ><label>Admin</label>
+    {% if form_name == 'Update' %}
+        {% for role in current_role %}
+           {% if role == "None" %}
+               <div class="small-4 columns">
+                 <label>Role</label>
+                   <input type="radio" name="role" value="admin"  />  <label>Admin</label>
+                   <input type="radio" name="role" value="None"  checked/>  <label>None</label>
 
-             {% endif %}
-         {% endfor %}
-          </div>
+                     </div>
+            {% elif role == "admin" %}
+                 <div class="small-4 columns">
+                  <label>Role</label>
+                     <input type="radio" name="role" value="admin"  checked/>  <label>Admin</label>
+                     <input type="radio" name="role" value="None"  />  <label>None</label>
+
+
+
+                       </div>
+
+                 {% endif %}
+              {% endfor %}
+
+
+
+
+
           <!-- For a New User-->
     {% else %}
+
     <div class="small-4 columns">
       <label>Role</label>
-        <input type="radio" name="role" value="admin" ><label>Admin</label>
-      </div>
+        <input type="radio" name="role" value="admin"  />  <label>Admin</label>
+        <input type="radio" name="role" value="None"  checked/>  <label>None</label>
+
+          </div>
 
     {% endif %}
 
