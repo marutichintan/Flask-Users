@@ -24,10 +24,9 @@ def user_add():
             password=generate_password_hash(request.form['password'])
             is_enabled=request.form['is_enabled']
             user=Users(email, name,password, is_enabled)
-            role = request.form.get('role', '')
-
-            if role == "admin":
-                role = Roles.query.filter_by(name="admin").first()
+            roles = request.form.getlist('role')
+            for r in roles:
+                role = Roles.query.filter_by(name=r).first()
                 user.roles.append(role)
             return add(user, success_url = 'users.user_index', fail_url = 'users.user_add')
         else:

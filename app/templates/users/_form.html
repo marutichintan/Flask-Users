@@ -2,7 +2,7 @@
 {% macro user_form(form_name = '', user='', current_role ='', user_name='', user_email='', required='required') %}
 
         <div class="center row">
-            <div class="large-8 columns">
+            <div class="small-8 columns">
             <h4> {{ form_name }} Users</h4>
                <fieldset>
                 <form action="" method="POST" >
@@ -14,48 +14,40 @@
          <!-- START STATUS -->
          {% if form_name == 'Update' %}
 
-                    <div class="small-4 columns">
-                    <label>Status
-                       <select name="is_enabled" multiple>
-                                    {% if user.is_enabled %}
-                                        <option value="True" selected>Active</option>
-                                        <option value="False" >Suspended</option>
-                                     {% else %}
-                                     <option value="True" >Active</option>
-                                     <option value="False" selected>Suspended</option>
+             <div class="small-6 columns">
+             <label>Status</label>
+               {% if user.is_enabled %}
+                 <input type="radio" name="is_enabled" value="True"  checked/><label>Active</label>
+                 <input type="radio" name="is_enabled" value="False"/><label>Suspended</label>
+               {% else %}
+                <input type="radio" name="is_enabled" value="True"  /><label>Active</label>
+                <input type="radio" name="is_enabled" value="False" checked/><label>Suspended</label>
 
-                                    {% endif %}
-                         </select> </label>
-                        </div>
+               {% endif %}
+                 </div>
+         <!-- For a New User-->
+         {% else %}
 
-            <!-- For a New User-->
-            {% else %}
-
-                  <div class="small-4 columns">
-                  <label>Status
-                     <select name="is_enabled" multiple>
-
-
-                <option value="True" selected>Active</option>
-                <option value="False" >Suspended</option>
-              </select> </label>
-             </div>
-
-            {% endif %}
+            <div class="small-6 columns">
+              <label>Status</label>
+                <input type="radio" name="is_enabled" value="True"  checked/><label>Active</label>
+                <input type="radio" name="is_enabled" value="False"/><label>Suspended</label>
+                  </div>
+        {% endif %}
 
             <!-- End STATUS -- >
          <!--  START ROLE -->
     {% if form_name == 'Update' %}
         {% for role in current_role %}
            {% if role == "None" %}
-               <div class="small-4 columns">
+               <div class="small-6 columns">
                  <label>Role</label>
                    <input type="radio" name="role" value="admin"  />  <label>Admin</label>
                    <input type="radio" name="role" value="None"  checked/>  <label>None</label>
 
                      </div>
             {% elif role == "admin" %}
-                 <div class="small-4 columns">
+                 <div class="small-6 columns">
                   <label>Role</label>
                      <input type="radio" name="role" value="admin"  checked/>  <label>Admin</label>
                      <input type="radio" name="role" value="None"  />  <label>None</label>
@@ -74,7 +66,7 @@
           <!-- For a New User-->
     {% else %}
 
-    <div class="small-4 columns">
+    <div class="small-6 columns">
       <label>Role</label>
         <input type="radio" name="role" value="admin"  />  <label>Admin</label>
         <input type="radio" name="role" value="None"  checked/>  <label>None</label>
