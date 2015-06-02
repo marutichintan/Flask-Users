@@ -47,6 +47,10 @@ class Users(db.Model, UserMixin):
      db.session.delete(user)
      return session_commit()
 
+  def is_active(self):
+      return self.is_enabled
+
+
 class UsersSchema(Schema):
 
     not_blank = validate.Length(min=1, error='Field cannot be blank')

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request,flash, redirect, url_for
 from app.users.models import Users, UsersSchema, Roles
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask.ext.login import LoginManager, login_user, logout_user, login_required
 
 users = Blueprint('users', __name__)
 #http://marshmallow.readthedocs.org/en/latest/quickstart.html#declaring-schemas
@@ -8,12 +9,14 @@ schema = UsersSchema()
 
 #Users
 @users.route('/' )
+@login_required
 def user_index():
     results = Users.query.all()
     #results = schema.dump(users, many=True).data
     return render_template('/users/index.html', results=results)
 
 @users.route('/add' , methods=['POST', 'GET'])
+
 def user_add():
     if request.method == 'POST':
         #http://marshmallow.readthedocs.org/en/latest/quickstart.html#validation
@@ -35,7 +38,7 @@ def user_add():
     return render_template('/users/add.html')
 
 @users.route('/update/<int:id>' , methods=['POST', 'GET'])
-
+@login_required
 def user_update (id):
     #Get user by primary key:
     user=Users.query.get_or_404(id)
@@ -74,9 +77,42 @@ def user_update (id):
 
 
 @users.route('/delete/<int:id>' , methods=['POST', 'GET'])
+@login_required
 def user_delete (id):
      user = Users.query.get_or_404(id)
      return delete(user, fail_url = 'users.user_index')
+
+
+#Initialize the LoginManager from Flask-Login
+login_manager = LoginManager()
+
+@login_manager.user_loader
+def load_user(id):
+    return Users.query.get(int(id))
+
+@users.route('/login', methods=['POST', 'GET'])
+def login ():
+  if request.method == 'POST':
+        email=request.form['email']
+        password=request.form['password']
+        user=Users.query.filter_by(email=email).first()
+        if user == None:
+           flash("invalid username/password")
+           return render_template('login.html')
+        if check_password_hash(user.password,password) and login_user(user):
+                 return redirect(url_for('users.user_index'))
+        else:
+             flash("invalid username/password")
+  return render_template('login.html')
+
+@users.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('users.login'))
+
+
+
+#End Login Manager
 
 
 #CRUD FUNCTIONS
