@@ -7,6 +7,8 @@ from app import create_app
 from app.users.models import Users
 
 app = create_app('config')
+email = 'youremail@leog.in'
+password = 'password'
 
 class TestUsers(unittest.TestCase):
     def setUp(self):
@@ -19,19 +21,19 @@ class TestUsers(unittest.TestCase):
         return self.app.get('/users/logout', follow_redirects=True)
 
     def test_01_login_logout(self):
-        rv = self.login('leo@leog.in', 'qwedsa')
+        rv = self.login(email, password)
         assert 'Users' in rv.data.decode('utf-8')
         rv = self.logout()
         assert 'Sign In' in rv.data.decode('utf-8')
 
     def test_02_list(self):
-      self.login('leo@leog.in', 'qwedsa')
+      self.login(email, password)
       rv = self.app.get('/users/')
       assert "Users" in rv.data.decode('utf-8')
 
 
     def test_05_add(self):
-        self.login('leo@leog.in', 'qwedsa')
+        self.login(email, password)
         rv = self.app.post('/users/add', data=dict(name = 'test name', email = 'test@email.com',
                            password="qwe765", is_enabled=True, role="None"), follow_redirects=True)
         assert 'Add was successful' in rv.data.decode('utf-8')
@@ -41,7 +43,7 @@ class TestUsers(unittest.TestCase):
     def test_10_Update(self):
 
          with app.app_context():
-            self.login('leo@leog.in', 'qwedsa')
+            self.login(email, password)
             user = Users.query.filter_by(email='test@email.com').first()
             id = user.id
             rv = self.app.post('/users/update/{}'.format(id), data=dict(name = 'test name update',
@@ -51,7 +53,7 @@ class TestUsers(unittest.TestCase):
 
     def test_15_delete(self):
                      with app.app_context():
-                       self.login('leo@leog.in', 'qwedsa')
+                       self.login(email, password)
                        user = Users.query.filter_by(email='test@email.update').first()
                        id = user.id
                        rv = self.app.post('/users/delete/{}'.format(id), follow_redirects=True)
