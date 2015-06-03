@@ -1,6 +1,6 @@
 #DATABASE SETTINGS
 db_username = 'postgres'
-db_password = 'qwedsa@123'
+db_password = ''
 db_name = 'user_manage'
 db_hostname = 'localhost'
 
