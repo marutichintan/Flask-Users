@@ -10,7 +10,7 @@ addons:
   postgresql: "9.3"
 
 before_script:
-  - psql -c 'create database search1;' -U postgres
+  - psql -c 'create database user_manage;' -U postgres
   - python db.py db init
   - python db.py db migrate
   - python db.py db upgrade
