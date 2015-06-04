@@ -1,5 +1,7 @@
 Flask-User is a user management app written  in python 3.4 with Flask, FLask-SQLAlchemy, marshmallow and PostgreSQL.
 
+![](https://travis-ci.org/Leo-g/Flask-Users.svg?branch=master)
+
 Its features include user roles, user session management with flask-login, password hashing and user status.
 
 Please ensure PostgreSQL is installed with the development libraries. Steps are available [here](http://techarena51.com/index.php/flask-sqlalchemy-postgresql-tutorial/)
