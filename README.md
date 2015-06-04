@@ -1,8 +1,9 @@
-Flask-Skeleton allows you to quickly build a Skeleton CRUD application  in python 3.4 with Flask, FLask-SQLAlchemy, marshmallow and PostgreSQL.
+Flask-User is a user management app written  in python 3.4 with Flask, FLask-SQLAlchemy, marshmallow and PostgreSQL.
+
+Its features include user roles, user session management with flask-login, password hashing and user status.
 
 Please ensure PostgreSQL is installed with the development libraries. Steps are available [here](http://techarena51.com/index.php/flask-sqlalchemy-postgresql-tutorial/)
 
-For Complete Documentation with screenshots and troubleshooting please see the [wiki](https://github.com/Leo-g/Flask-Skeleton/wiki)
 
 ###Installation Steps
 ####Step 1:Clone the project to your application folder.
@@ -25,10 +26,13 @@ For Complete Documentation with screenshots and troubleshooting please see the [
     python db.py db init
     python db.py db migrate
     python db.py db upgrade
+    
+####  Step 5 : Create an initial admin user: 
+   Modify create_user.py with your email and password and then run
    
-####  Step 5 : Start the server.
+    python create_user.py  
+   
+####  Step 6 : Start the server
     python run.py
 
-Crud operations are performed on a user resource.
-
-**You should be able to see the App at  http://localhost:5000/users**
+**You can then login with your email and password and create users at  http://localhost:5000/users/login**
