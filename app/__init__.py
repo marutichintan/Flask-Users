@@ -14,7 +14,10 @@ def create_app(config_filename):
     from app.users.views import login_manager
     login_manager.init_app(app)
 
+    
     #Blueprints
+    from app.roles.views import roles
+    app.register_blueprint(roles, url_prefix='/roles')
     from app.users.views import users
     app.register_blueprint(users, url_prefix='/users')
 

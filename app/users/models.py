@@ -64,25 +64,6 @@ class UsersSchema(Schema):
     class Meta:
        fields = ('id', 'email', 'name', 'password', 'is_enabled', 'roles')
 
-class Roles(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(50), unique=True, server_default = 'normal', nullable=False)
-
-    def __init__(self, name):
-         self.name=name
-
-
-    def add(self,role):
-        db.session.add(role)
-        return session_commit ()
-
-    def update(self):
-         return session_commit()
-
-    def delete(self,role):
-        db.session.delete(role)
-        return session_commit()
-
 
 
 

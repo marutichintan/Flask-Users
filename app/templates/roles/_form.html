@@ -1,0 +1,22 @@
+
+{% macro role_form(form_name = '', role_name='') %}
+
+        <div class="center row">
+            <div class="large-8 columns">
+            <h4> {{ form_name }} Roles</h4>
+               <fieldset>
+                <form action="" method="POST" >
+
+				  <label>Name <small>required</small><input type="text" name="name" value="{{ role_name }}"  required/>	 </label>
+
+
+				   <button class="button "  type="submit">{{ form_name }}</button>
+                  </form>
+                </fieldset>
+
+
+				</div>
+			  </div>
+
+
+{% endmacro %}

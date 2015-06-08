@@ -1,0 +1,11 @@
+
+{{% extends "layout.html" %}}
+  {{% block body %}}
+
+    {{% from '{resources}/_form.html' import {resource}_form %}}
+
+    {{{{  {resource}_form(form_name = 'Add', {resource}_name = '', {resource}_email = '') }}}}
+    
+  
+			
+  {{% endblock %}}

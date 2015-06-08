@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+  {% block body %}
+
+		{% from 'roles/_form.html' import role_form %}
+
+    {{ role_form(form_name = 'Update', role_name = role.name) }}
+
+{% endblock %}
+
+
+
+
+
+
+
+   
