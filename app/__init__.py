@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask      
 
 
 #http://flask.pocoo.org/docs/0.10/patterns/appfactories/
@@ -13,6 +13,8 @@ def create_app(config_filename):
     #Init flask-login
     from app.users.views import login_manager
     login_manager.init_app(app)
+    
+    
 
     
     #Blueprints
@@ -20,5 +22,6 @@ def create_app(config_filename):
     app.register_blueprint(roles, url_prefix='/roles')
     from app.users.views import users
     app.register_blueprint(users, url_prefix='/users')
+  
 
     return app

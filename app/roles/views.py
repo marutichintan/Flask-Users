@@ -1,19 +1,24 @@
 #resource, resources, Resources
 from flask import Blueprint, render_template, request,flash, redirect, url_for
 from app.roles.models import Roles, RolesSchema
+from flask.ext.login import login_required
 
 roles = Blueprint('roles', __name__)
 #http://marshmallow.readthedocs.org/en/latest/quickstart.html#declaring-schemas
 schema = RolesSchema()
 
 #Roles
+
 @roles.route('/' )
+@login_required
 def role_index():
     roles = Roles.query.all()
     results = schema.dump(roles, many=True).data
     return render_template('/roles/index.html', results=results)
+    
 
 @roles.route('/add' , methods=['POST', 'GET'])
+@login_required
 def role_add():
     if request.method == 'POST':
         #Validate form values by de-serializing the request, http://marshmallow.readthedocs.org/en/latest/quickstart.html#validation
@@ -27,8 +32,9 @@ def role_add():
 
     return render_template('/roles/add.html')
 
-@roles.route('/update/<int:id>' , methods=['POST', 'GET'])
 
+@roles.route('/update/<int:id>' , methods=['POST', 'GET'])
+@login_required
 def role_update (id):
     #Get role by primary key:
     role=Roles.query.get_or_404(id)
@@ -42,8 +48,8 @@ def role_update (id):
 
     return render_template('/roles/update.html', role=role)
 
-
 @roles.route('/delete/<int:id>' , methods=['POST', 'GET'])
+@login_required
 def role_delete (id):
      role = Roles.query.get_or_404(id)
      return delete(role, fail_url = 'roles.role_index')
