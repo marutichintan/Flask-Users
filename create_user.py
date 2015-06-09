@@ -11,7 +11,7 @@ name='Leo'
 email='youremail@leog.in'
 password=generate_password_hash('password')
 is_enabled=True
-role="admin"
+admin_role_name="admin"
 user=Users(email, name,password, is_enabled)
 
 def db_commit():
@@ -25,10 +25,11 @@ def db_commit():
           return False
 
 with app.app_context():
-    new_role = Roles(role)
-    db.session.add(new_role)
+    admin_role = Roles(admin_role_name)
+    no_role = Roles("None")
+    db.session.add_all([admin_role, no_role])
     if db_commit():
-        user_role = Roles.query.filter_by(name=role).first()
+        user_role = Roles.query.filter_by(name=admin_role_name).first()
         user.roles.append(user_role)
         db.session.add(user)
         db_commit()

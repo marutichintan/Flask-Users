@@ -35,7 +35,7 @@ class TestUsers(unittest.TestCase):
     def test_05_add(self):
         self.login(email, password)
         rv = self.app.post('/users/add', data=dict(name = 'test name', email = 'test@email.com',
-                           password="qwe765", is_enabled=True, role="admin"), follow_redirects=True)
+                           password="qwe765", is_enabled=True, role="None"), follow_redirects=True)
         assert 'Add was successful' in rv.data.decode('utf-8')
 
 
