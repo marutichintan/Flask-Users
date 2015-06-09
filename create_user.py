@@ -2,7 +2,8 @@ from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import SQLAlchemyError
 
 from app import create_app
-from app.users.models import Users, Roles, db
+from app.users.models import Users, db
+from app.roles.models import Roles
 
 app = create_app('config')
 
