@@ -10,7 +10,7 @@ Please ensure PostgreSQL is installed with the development libraries. Steps are 
 ###Installation Steps
 ####Step 1:Clone the project to your application folder.
 
-    git clone git@github.com:Leo-g/Flask-Skeleton.git YourAppFolderName
+    git clone git@github.com:Leo-g/Flask-Users.git YourAppFolderName
 
 ####Step 2: Activate the virtual environment.
  
