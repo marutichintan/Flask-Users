@@ -5,6 +5,7 @@
 import unittest
 from app import create_app
 from app.users.models import Users
+from app.roles.models import Roles
 
 app = create_app('config')
 email = 'youremail@leog.in'
@@ -40,7 +41,7 @@ class TestUsers(unittest.TestCase):
 
 
 
-    def test_10_Update(self):
+    def test_10_update(self):
 
          with app.app_context():
             self.login(email, password)
@@ -52,14 +53,43 @@ class TestUsers(unittest.TestCase):
             assert 'Update was successful' in rv.data.decode('utf-8')
 
     def test_15_delete(self):
-                     with app.app_context():
-                       self.login(email, password)
-                       user = Users.query.filter_by(email='test@email.update').first()
-                       id = user.id
-                       rv = self.app.post('/users/delete/{}'.format(id), follow_redirects=True)
-                       assert 'Delete was successful' in rv.data.decode('utf-8')
-                       rv=self.logout()
-                       assert 'Sign In' in rv.data.decode('utf-8')
+
+         with app.app_context():
+           self.login(email, password)
+           user = Users.query.filter_by(email='test@email.update').first()
+           id = user.id
+           rv = self.app.post('/users/delete/{}'.format(id), follow_redirects=True)
+           assert 'Delete was successful' in rv.data.decode('utf-8')
+           rv=self.logout()
+           assert 'Sign In' in rv.data.decode('utf-8')
+
+    def test_20_role_add(self):
+        self.login(email, password)
+        rv = self.app.post('/roles/add', data=dict(name = 'test_role'), follow_redirects=True)
+        assert 'Add was successful' in rv.data.decode('utf-8')
+
+
+
+    def test_25_role_update(self):
+
+         with app.app_context():
+            self.login(email, password)
+            role = Roles.query.filter_by(name='test_role').first()
+            id = role.id
+            rv = self.app.post('/roles/update/{}'.format(id), data=dict(name = 'tester_role'),
+                                follow_redirects=True)
+            assert 'Update was successful' in rv.data.decode('utf-8')
+
+    def test_30_delete(self):
+
+         with app.app_context():
+           self.login(email, password)
+           role = Roles.query.filter_by(name='tester_role').first()
+           id = role.id
+           rv = self.app.post('/roles/delete/{}'.format(id), follow_redirects=True)
+           assert 'Delete was successful' in rv.data.decode('utf-8')
+           rv=self.logout()
+           assert 'Sign In' in rv.data.decode('utf-8')
 
 
 if __name__ == '__main__':
