@@ -12,3 +12,4 @@ alembic==0.7.6
 itsdangerous==0.24
 marshmallow==1.2.6
 psycopg2==2.6
+inflect==0.2.5
